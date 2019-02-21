@@ -66,53 +66,52 @@ public class BinarySearchTree<T extends Comparable<T>> {
 
     // Find item in the tree
     private Node<T> find(Node<T> x, T key) {
-        //! TODO: Add your implementation here.
-        
+        if (x==null)
+            return x;
+
+        int compare = key.compareTo(x._value);
+        if (compare < 0)
+            return find(x._left, key);
+        else if (compare > 0)
+            return find(x._right, key);
+        else
+            return x;
     }
 
     public Node<T> find(T key) {
         return find(_root, key);
     }
-    
-    // Find the minimum value of the BST.
-    private Node<T> minimum(Node<T> tree) {
-        if (tree == null)
-            return null;
-
-        while(tree._left != null)
-            tree = tree._left;
-        return tree;
-    }
-
-    public T minimum() {
-        Node<T> p = minimum(_root);
-        if (p != null)
-            return p._value;
-
-        return null;
-    }
-     
-    // Find the maximum value of BST.
-    private Node<T> maximum(Node<T> tree) {
-        //! TODO: Add your implementation here.
-        
-    }
-
-    public T maximum() {
-        Node<T> p = maximum(_root);
-        if (p != null)
-            return p._value;
-
-        return null;
-    }
 
     // Insert the value to the BST.
     private void insert(BinarySearchTree<T> bst, Node<T> z) {
-        //! TODO: Add your implementation here.
-        
+        //!TODO: Add your implementation here.
     }
 
     public void insert(T key) {
         insert(this, new Node<T>(key,null,null,null));
+    }
+    
+    // Remove a node from the BST
+    private Node<T> remove(BinarySearchTree<T> bst, Node<T> z) {
+        //!TODO: Add your implementation here.
+        return null;
+    }
+
+    public void remove(T key) {
+        Node<T> z, node; 
+
+        if ((z = find(_root, key)) != null)
+            if ( (node = remove(this, z)) != null)
+                node = null;
+    }
+
+    // Print the BST.
+    private void print(Node<T> tree, T key, int direction) {
+        //!TODO: Add your implementation here.
+    }
+
+    public void print() {
+        if (_root != null)
+            print(_root, _root._value, 0);
     }
 }
