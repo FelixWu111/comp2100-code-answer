@@ -126,7 +126,8 @@ public class RBTree<T extends Comparable<T>> {
                         if (x.value == root.value) root = x.r; // Update root
                         x.rotateLeft();
                     } else {
-                        // Perform right rotation
+                        // This is part of the "then" clause where left and right are swapped
+                         // Perform right rotation
                         // TODO: Implement this
                     }
 
@@ -140,6 +141,7 @@ public class RBTree<T extends Comparable<T>> {
                         // Perform right rotation
                     } else
                     {
+                        // This is part of the "then" clause where left and right are swapped
                         // Perform left rotation
                     }
             }
