@@ -1,3 +1,8 @@
+// u6174243 Qingzheng Xu
+// u6683369 Jinming Dong
+// u6250866 Yu Wu
+// u6250082 Xuguang Song
+
 public class BinarySearchTree<T extends Comparable<T>> {
 
     private Node<T> _root; //Root node
@@ -85,6 +90,27 @@ public class BinarySearchTree<T extends Comparable<T>> {
     // Insert the value to the BST.
     private void insert(BinarySearchTree<T> bst, Node<T> z) {
         //!TODO: Add your implementation here.
+    	int compare
+    	Node<T> y = null;
+    	Node<T> x = bst._root
+    	while (bst!=null) {
+    		y = x;
+    		compare = z._value.compareTo(x._value);
+    		if (compare < 0)
+    			x = x._left;
+    		else
+    			x = x.right
+    	}
+    	z._parent = y;
+    	if(y==null)
+    		bst._root = z;
+    	else {
+    		compare = z._value.compareTo(y._value);
+    		if(compare<0)
+    			y._left = z;
+    		else
+    			y._right = z;
+    	}
     }
 
     public void insert(T key) {
