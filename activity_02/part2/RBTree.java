@@ -1,3 +1,8 @@
+// u6174243 Qingzheng Xu
+// u6683369 Jinming Dong
+// u6250866 Yu Wu
+// u6250082 Xuguang Song
+
 public class RBTree<T extends Comparable<T>> {
     private Node<T> root; // The root node of the tree
 
@@ -35,8 +40,35 @@ public class RBTree<T extends Comparable<T>> {
             // account if you are trying to copy over your part 1 solution
 
             // HINT: Remember to update the parent of the node being inserted!
-
-
+        	if (root == null) {
+        		root = x;
+        	} else {
+        		root.insert(x);
+        	}
+        	
+        	while (x.value != root.value && x.parent.color == Colour.RED) {
+        		boolean left = x.parent == x.parent.paremt.l;
+        		Node<T> y = left ? x.parent.parent.r : x.parent.parent.l;
+        		
+        		if (y.colour == Colour.RED) {
+        		x.parent.colour =  Colour.BLACK;
+        	    y.colour = Colour.BLACK;
+        		x.parent.parent.colour = Colour.RED;
+        		
+        		x = x.parent.parent;
+        		} else {
+        			if (x.value == (left ? x.parent.r.value : x.parent.l.value)) {
+        				x = x.parent;
+        				if (left) {
+        					if(x.value == root.value) root = x.r;
+        					x.rotateLeft();
+        				} else {
+        					if(x.value == root.value) root = x.l;
+        					x.rotateRight();
+        				}
+        			}
+        		}
+        	}
         }
 
         // Rotate the node so it becomes the child of its right branch
