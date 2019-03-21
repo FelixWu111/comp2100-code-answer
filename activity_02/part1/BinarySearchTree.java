@@ -90,16 +90,16 @@ public class BinarySearchTree<T extends Comparable<T>> {
     // Insert the value to the BST.
     private void insert(BinarySearchTree<T> bst, Node<T> z) {
         //!TODO: Add your implementation here.
-    	int compare
+    	int compare;
     	Node<T> y = null;
-    	Node<T> x = bst._root
+    	Node<T> x = bst._root;
     	while (bst!=null) {
     		y = x;
     		compare = z._value.compareTo(x._value);
     		if (compare < 0)
     			x = x._left;
     		else
-    			x = x.right
+    			x = x._right;
     	}
     	z._parent = y;
     	if(y==null)

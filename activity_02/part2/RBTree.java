@@ -5,6 +5,7 @@
 
 public class RBTree<T extends Comparable<T>> {
     private Node<T> root; // The root node of the tree
+    private Node<T> x;
 
     public class Node<T extends Comparable<T>> {
         Colour colour;       // Node colour
@@ -46,8 +47,8 @@ public class RBTree<T extends Comparable<T>> {
         		root.insert(x);
         	}
         	
-        	while (x.value != root.value && x.parent.color == Colour.RED) {
-        		boolean left = x.parent == x.parent.paremt.l;
+        	while (x.value != root.value && x.parent.colour == Colour.RED) {
+        		boolean left = (x.parent == x.parent.parent.l);
         		Node<T> y = left ? x.parent.parent.r : x.parent.parent.l;
         		
         		if (y.colour == Colour.RED) {
