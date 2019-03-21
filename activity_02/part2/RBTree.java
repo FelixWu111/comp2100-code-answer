@@ -49,7 +49,7 @@ public class RBTree<T extends Comparable<T>> {
         	
         	while (x.value != root.value && x.parent.colour == Colour.RED) {
         		boolean left = (x.parent == x.parent.parent.l);
-        		Node<T> y = left ? x.parent.parent.r : x.parent.parent.l;
+        		RBTree.Node y = left ? x.parent.parent.r : x.parent.parent.l;
         		
         		if (y.colour == Colour.RED) {
         		x.parent.colour =  Colour.BLACK;
@@ -117,6 +117,22 @@ public class RBTree<T extends Comparable<T>> {
         public void rotateRight() {
             // TODO: Implement this function (2/3)
             // HINT: It is the mirrored version of rotateLeft()
+            if (parent != null) {
+                // Determine whether this node is the left or right child of its parent
+                if (parent.r.value == value) {
+                    parent.r = l;
+                } else {
+                    parent.l = l;
+                }
+            }
+            l.parent = parent;
+
+            parent = l;
+            // Take right node's left branch
+            l = parent.r;
+            l.parent = this;
+            // Take the place of the right node's left branch
+            parent.r = this;
         }
 
     }
@@ -162,6 +178,8 @@ public class RBTree<T extends Comparable<T>> {
                         // This is part of the "then" clause where left and right are swapped
                          // Perform right rotation
                         // TODO: Implement this
+                        if (x.value == root.value) root = x.l;
+                        x.rotateRight();
                     }
 
                 }
@@ -172,10 +190,12 @@ public class RBTree<T extends Comparable<T>> {
                 // TODO: Complete this
                     if (left) {
                         // Perform right rotation
+                        x.rotateRight();
                     } else
                     {
                         // This is part of the "then" clause where left and right are swapped
                         // Perform left rotation
+                        x.rotateLeft();
                     }
             }
         }
@@ -189,7 +209,7 @@ public class RBTree<T extends Comparable<T>> {
     // (Safely) insert a value into the tree
     public void insert(T value) {
         Node<T> node = new Node<T>(value);
-        if (node != null)
+        if (value != null)
             insert(node);
     }
 
