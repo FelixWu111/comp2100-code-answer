@@ -49,7 +49,7 @@ public class RBTree<T extends Comparable<T>> {
         	
         	while (x.value != root.value && x.parent.colour == Colour.RED) {
         		boolean left = (x.parent == x.parent.parent.l);
-        		Node<T> y = left ? x.parent.parent.r : x.parent.parent.l;
+        		RBTree.Node y = left ? x.parent.parent.r : x.parent.parent.l;
         		
         		if (y.colour == Colour.RED) {
         		x.parent.colour =  Colour.BLACK;
