@@ -112,12 +112,8 @@ public class Tokenizer {
 
     // Return the next token and remove it from the buffer
     public Token takeNext() {
-        TokenResult nextResult = nextToken();
-        if(nextResult==null)
-            return null;
         // TODO: Implement removal from buffer
-
-        return null;
+        return next();
     }
 
     private void consumewhite() {
