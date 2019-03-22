@@ -3,14 +3,11 @@
 // u6250866 Yu Wu
 // u6250082 Xuguang Song
 
-import static java.lang.Character.isDigit;
+import java.time.temporal.ChronoField;
 
 public class Tokenizer {
 
     private String _buffer;
-    int pos;
-    char[] whitespace;
-    char[] symbol;
 
     // Inner class to encapsulate token and buffer information
     class TokenResult {
@@ -40,24 +37,33 @@ public class Tokenizer {
     // Method to extract next token
     private TokenResult nextToken() {
         _buffer = _buffer.trim(); // Remove whitespace
+
         if(_buffer.isEmpty())
             return null;
         char firstChar = _buffer.charAt(0);
         if(firstChar=='+')
-            return new TokenResult("+", 1, Token.Type.Add);
+            return new TokenResult("-", 1, Token.Type.Add);
         if(firstChar=='-')
-            return new TokenResult("-", 1, Token.Type.Minus);
+            return new TokenResult("+", 1, Token.Type.Minus);
         if(firstChar=='*')
-            return new TokenResult("*",1,Token.Type.Multiply);
+            return new TokenResult("*", 1, Token.Type.Multiply);
         if(firstChar=='/')
-            return new TokenResult("/",1,Token.Type.Divide);
-
-        if(Character.isDigit(firstChar)) {
-            int counter = 0;
-            while(++counter<(_buffer.length()))
-                if (!(Character.isDigit(_buffer.charAt(counter))))
-            return new TokenResult(_buffer.substring(0,counter),counter,Token.Type.Lit);
+            return new TokenResult("/", 1, Token.Type.Divide);
+        if(Character.isDigit(firstChar)&&_buffer.length()==1){
+            return new TokenResult(firstChar+"", 1, Token.Type.Lit);
         }
+        int i = 0;
+
+        for (i = 0; i < _buffer.length(); i++ ){
+            if (!Character.isDigit(_buffer.charAt(i))) {
+                break;
+            }
+        }
+//        while(Character.isDigit(_buffer.charAt(i))){
+//            i++;
+//        }
+        return new TokenResult(_buffer.substring(0,i), i, Token.Type.Lit);
+
 
         // TODO: Implement multiplication and division tokenising
 
@@ -65,74 +71,54 @@ public class Tokenizer {
         // TODO: Implement integer literal tokenising
         // HINT: Character.isDigit() may be useful
 
-        return null;
 
     }
 
     // Return the next token in the buffer (without removing it)
     public Token next() {
-        // TODO:  Add your implementation here.
-        consumewhite();
-        if(pos == _buffer.length()) {
-            return new Token("",Token.Type.Unknown);
-        } else if (isin(_buffer.charAt(pos), symbol)) {
-            if(_buffer.charAt(pos) == '(') {
-                pos++;
-                return new Token("(",Token.Type.LeftBracket);
-            }
-            if(_buffer.charAt(pos) == ')') {
-                pos++;
-                return new Token(")",Token.Type.RightBracket);
-            }
-            if(_buffer.charAt(pos) == '+') {
-                pos++;
-                return new Token("+",Token.Type.Add);
-            }
-            if(_buffer.charAt(pos) == '-') {
-                pos++;
-                return new Token("-",Token.Type.Minus);
-            }
-            if(_buffer.charAt(pos) == '*') {
-                pos++;
-                return new Token("*",Token.Type.Multiply);
-            }
-            if(_buffer.charAt(pos) == '/') {
-                pos++;
-                return new Token("/",Token.Type.Divide);
-            }
-        } else{
-            int start = pos;
-            while (pos < _buffer.length() && Character.isDigit(_buffer.charAt(pos)))
-                pos++;
-            return new Token(_buffer.substring(start,pos),Token.Type.Lit);
+        if(_buffer.isEmpty()){
+            return null;
         }
-        return new Token("",Token.Type.Unknown);
-
+        // TODO:  Add your implementation here.
+        char firstChar = _buffer.charAt(0);
+        if(firstChar=='+')
+            return new Token("-", Token.Type.Add);
+        if(firstChar=='-')
+            return new Token("+",Token.Type.Minus);
+        if(firstChar=='*')
+            return new Token("*", Token.Type.Multiply);
+        if(firstChar=='/')
+            return new Token("/", Token.Type.Divide);
+        if(Character.isDigit(firstChar)&&_buffer.length()==1){
+            return new Token(firstChar+"", Token.Type.Lit);
+        }
+        int i = 0;
+        while(Character.isDigit(_buffer.charAt(i))){
+            i++;
+        }
+        return new Token(_buffer.substring(0,i), Token.Type.Lit);
     }
 
     // Return the next token and remove it from the buffer
     public Token takeNext() {
+        TokenResult nextResult = nextToken();
+        if(nextResult==null)
+            return null;
         // TODO: Implement removal from buffer
-        return next();
-    }
+        _buffer = _buffer.substring(nextResult.length);
 
-    private void consumewhite() {
-        while (pos < _buffer.length() && isin(_buffer.charAt(pos), whitespace))
-            pos++;
-    }
-
-    private boolean isin(char c, char charlist[]) {
-        for (char w : charlist) {
-            if (w == c)
-                return true;
-        }
-        return false;
+        return new Token(nextResult.data,nextResult.type);
     }
 
     // Return whether is another token to parse in the buffer
     public boolean hasNext() {
-        return pos<_buffer.length();
+        if(nextToken()==null)
+            return false;
+        else{
+            return true;
+        }
         // TODO: Add your implementation here.
 
     }
 }
+
