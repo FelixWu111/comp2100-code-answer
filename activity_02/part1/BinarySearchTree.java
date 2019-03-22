@@ -32,11 +32,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
     public BinarySearchTree() {
         _root=null;
     }
-    
+
     private static int max(int a, int b) {
         return a>b ? a : b;
     }
-    
+
     private int height(Node<T> tree) {
         if (tree != null)
             return 1 + max(height(tree._left), height(tree._right));
@@ -87,48 +87,52 @@ public class BinarySearchTree<T extends Comparable<T>> {
         return find(_root, key);
     }
 
-    // Insert the value to the BST.
-    private void insert(BinarySearchTree<T> bst, Node<T> z) {
+    // Insert the node.
+    private void insert(Node<T> bst, Node<T> z) {
+        if (_root == null) _root = z;
+        else {
+            int index = bst._value.compareTo(z._value);
+            if (index < 0){
+                if (bst._right == null)bst._right = new Node<>(z._value, bst, null, null);
+                else insert(bst._right, z);
+            } else if (index > 0){
+                if (bst._left == null) bst._left = new Node<>(z._value, bst, null, null);
+                else insert(bst._left, z);
+            }
+
+
+        }
+
         //!TODO: Add your implementation here.
-    	int compare;
-    	Node<T> y = null;
-    	Node<T> x = bst._root;
-    	while (bst!=null) {
-    		y = x;
-    		compare = z._value.compareTo(x._value);
-    		if (compare < 0)
-    			x = x._left;
-    		else
-    			x = x._right;
-    	}
-    	z._parent = y;
-    	if(y==null)
-    		bst._root = z;
-    	else {
-    		compare = z._value.compareTo(y._value);
-    		if(compare<0)
-    			y._left = z;
-    		else
-    			y._right = z;
-    	}
     }
 
     public void insert(T key) {
-        insert(this, new Node<T>(key,null,null,null));
+        insert(_root, new Node<T>(key,null,null,null));
     }
-    
+
     // Remove a node from the BST
-    private Node<T> remove(BinarySearchTree<T> bst, Node<T> z) {
+    private Node<T> remove(Node<T> bst, Node<T> z) {
+        T key = z.getKey();
+        Node<T> target = find(z, key);
+        if (target != null) {
+            Node<T> tParent = target._parent;
+            if (tParent._right._value == target._value) tParent._right = null;
+            else tParent._left = null;
+            Node<T> tempL = target._left;
+            Node<T> tempR = target._right;
+            target._left = null;
+            target._right = null;
+            if (tempL != null) insert(tempL.getKey());
+            if (tempR != null) insert(tempR.getKey());
+        }
+
         //!TODO: Add your implementation here.
-        return null;
+        return bst;
     }
 
     public void remove(T key) {
-        Node<T> z, node; 
-
-        if ((z = find(_root, key)) != null)
-            if ( (node = remove(this, z)) != null)
-                node = null;
+        Node<T> z = find(key);
+        _root = remove(_root, z);
     }
 
     // Print the BST.
