@@ -116,7 +116,7 @@ public class BinarySearchTree<T extends Comparable<T>> {
     public void insert(T key) {
         insert(this, new Node<T>(key,null,null,null));
     }
-    
+
     // Remove a node from the BST
     private Node<T> remove(BinarySearchTree<T> bst, Node<T> z) {
         //!TODO: Add your implementation here.
