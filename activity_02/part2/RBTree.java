@@ -3,6 +3,8 @@
 // u6250866 Yu Wu
 // u6250082 Xuguang Song
 
+import java.util.Hashtable;
+
 public class RBTree<T extends Comparable<T>> {
     private Node<T> root;
 
@@ -199,3 +201,4 @@ public class RBTree<T extends Comparable<T>> {
     }
 
 }
+
