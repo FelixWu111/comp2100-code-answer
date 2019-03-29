@@ -1,423 +1,651 @@
-// u6174243 Qingzheng Xu
-// u6683369 Jinming Dong
-// u6250866 Yu Wu
-// u6250082 Xuguang Song
-import java.util.NoSuchElementException;
-public class RBTreeBST <Key extends Comparable<Key>, Value> {
-    private static final boolean RED   = true;
-    private static final boolean BLACK = false;
+public class RBTreeBST<K,V> {
+    RBTree rbTree = new RBTree();
 
-    private Node root;     // root of the BST
-
-    // BST helper node data type
-    private class Node {
-        private Key key;           // key
-        private Value val;         // associated data
-        private Node left, right;  // links to left and right subtrees
-        private boolean color;     // color of parent link
-        private int size;          // subtree count
-
-        public Node(Key key, Value val, boolean color, int size) {
+    public class KVPair{
+        K key;
+        V value;
+        KVPair(K key, V value) {
             this.key = key;
-            this.val = val;
-            this.color = color;
-            this.size = size;
+            this.value = value;
+        }
+        @Override
+        public String toString() {
+            return "("+key+", "+value+")";
         }
     }
 
-    /**
-     * Initializes an empty symbol table.
-     */
-    public RBTreeBST() {
-    }
-
-    /***************************************************************************
-     *  Node helper methods.
-     ***************************************************************************/
-    // is node x red; false if x is null ?
-    private boolean isRed(Node x) {
-        if (x == null) return false;
-        return x.color == RED;
-    }
-
-    // number of node in subtree rooted at x; 0 if x is null
-    private int size(Node x) {
-        if (x == null) return 0;
-        return x.size;
-    }
-
-
-    /**
-     * Returns the number of key-value pairs in this symbol table.
-     * @return the number of key-value pairs in this symbol table
-     */
-    public int size() {
-        return size(root);
-    }
-
-    /**
-     * Is this symbol table empty?
-     * @return {@code true} if this symbol table is empty and {@code false} otherwise
-     */
-    public boolean isEmpty() {
-        return root == null;
-    }
-
-
-    /***************************************************************************
-     *  Standard BST search.
-     ***************************************************************************/
-
-    /**
-     * Returns the value associated with the given key.
-     * @param key the key
-     * @return the value associated with the given key if the key is in the symbol table
-     *     and {@code null} if the key is not in the symbol table
-     * @throws IllegalArgumentException if {@code key} is {@code null}
-     */
-    public Value get(Key key) {
-        if (key == null) throw new IllegalArgumentException("argument to get() is null");
-        return get(root, key);
-    }
-
-    // value associated with the given key in subtree rooted at x; null if no such key
-    private Value get(Node x, Key key) {
-        while (x != null) {
-            int cmp = key.compareTo(x.key);
-            if      (cmp < 0) x = x.left;
-            else if (cmp > 0) x = x.right;
-            else              return x.val;
+    public class Node {
+        boolean c;          // Color of the node
+        KVPair kv;                // Value
+        Node l, r, p;    // Children
+        public Node(KVPair kv) {
+            this.kv = kv;
+            this.c = true; // true is red
+            p = l = r = null;
         }
-        return null;
+        public KVPair getPair() {
+            return kv;
+        }
     }
 
-    /**
-     * Does this symbol table contain the given key?
-     * @param key the key
-     * @return {@code true} if this symbol table contains {@code key} and
-     *     {@code false} otherwise
-     * @throws IllegalArgumentException if {@code key} is {@code null}
-     */
-    public boolean contains(Key key) {
-        return get(key) != null;
-    }
-
-    /***************************************************************************
-     *  Red-black tree insertion.
-     ***************************************************************************/
-
-    /**
-     * Inserts the specified key-value pair into the symbol table, overwriting the old
-     * value with the new value if the symbol table already contains the specified key.
-     * Deletes the specified key (and its associated value) from this symbol table
-     * if the specified value is {@code null}.
-     *
-     * @param key the key
-     * @param val the value
-     * @throws IllegalArgumentException if {@code key} is {@code null}
-     */
-    public void put(Key key, Value val) {
-        if (key == null) throw new IllegalArgumentException("first argument to put() is null");
-        if (val == null) {
-            delete(key);
-            return;
+    public class RBTree {
+        private Node _r;
+        public RBTree() {
+            _r=null;
+        }
+        public Node get_r() {
+            return _r;
         }
 
-        root = put(root, key, val);
-        root.color = BLACK;
-        // assert check();
-    }
-
-    // insert the key-value pair in the subtree rooted at h
-    private Node put(Node h, Key key, Value val) {
-        if (h == null) return new Node(key, val, RED, 1);
-
-        int cmp = key.compareTo(h.key);
-        if      (cmp < 0) h.left  = put(h.left,  key, val);
-        else if (cmp > 0) h.right = put(h.right, key, val);
-        else              h.val   = val;
-
-        // fix-up any right-leaning links
-        if (isRed(h.right) && !isRed(h.left))      h = rotateLeft(h);
-        if (isRed(h.left)  &&  isRed(h.left.left)) h = rotateRight(h);
-        if (isRed(h.left)  &&  isRed(h.right))     flipColors(h);
-        h.size = size(h.left) + size(h.right) + 1;
-
-        return h;
-    }
-
-    /***************************************************************************
-     *  Red-black tree deletion.
-     ***************************************************************************/
-
-    /**
-     * Removes the smallest key and associated value from the symbol table.
-     * @throws NoSuchElementException if the symbol table is empty
-     */
-    public void deleteMin() {
-        if (isEmpty()) throw new NoSuchElementException("BST underflow");
-
-        // if both children of root are black, set root to red
-        if (!isRed(root.left) && !isRed(root.right))
-            root.color = RED;
-
-        root = deleteMin(root);
-        if (!isEmpty()) root.color = BLACK;
-        // assert check();
-    }
-
-    // delete the key-value pair with the minimum key rooted at h
-    private Node deleteMin(Node h) {
-        if (h.left == null)
-            return null;
-
-        if (!isRed(h.left) && !isRed(h.left.left))
-            h = moveRedLeft(h);
-
-        h.left = deleteMin(h.left);
-        return balance(h);
-    }
-
-
-    /**
-     * Removes the largest key and associated value from the symbol table.
-     * @throws NoSuchElementException if the symbol table is empty
-     */
-    public void deleteMax() {
-        if (isEmpty()) throw new NoSuchElementException("BST underflow");
-
-        // if both children of root are black, set root to red
-        if (!isRed(root.left) && !isRed(root.right))
-            root.color = RED;
-
-        root = deleteMax(root);
-        if (!isEmpty()) root.color = BLACK;
-        // assert check();
-    }
-
-    // delete the key-value pair with the maximum key rooted at h
-    private Node deleteMax(Node h) {
-        if (isRed(h.left))
-            h = rotateRight(h);
-
-        if (h.right == null)
-            return null;
-
-        if (!isRed(h.right) && !isRed(h.right.left))
-            h = moveRedRight(h);
-
-        h.right = deleteMax(h.right);
-
-        return balance(h);
-    }
-
-    /**
-     * Removes the specified key and its associated value from this symbol table
-     * (if the key is in this symbol table).
-     *
-     * @param  key the key
-     * @throws IllegalArgumentException if {@code key} is {@code null}
-     */
-    public void delete(Key key) {
-        if (key == null) throw new IllegalArgumentException("argument to delete() is null");
-        if (!contains(key)) return;
-
-        // if both children of root are black, set root to red
-        if (!isRed(root.left) && !isRed(root.right))
-            root.color = RED;
-
-        root = delete(root, key);
-        if (!isEmpty()) root.color = BLACK;
-        // assert check();
-    }
-
-    // delete the key-value pair with the given key rooted at h
-    private Node delete(Node h, Key key) {
-        // assert get(h, key) != null;
-
-        if (key.compareTo(h.key) < 0)  {
-            if (!isRed(h.left) && !isRed(h.left.left))
-                h = moveRedLeft(h);
-            h.left = delete(h.left, key);
-        }
-        else {
-            if (isRed(h.left))
-                h = rotateRight(h);
-            if (key.compareTo(h.key) == 0 && (h.right == null))
-                return null;
-            if (!isRed(h.right) && !isRed(h.right.left))
-                h = moveRedRight(h);
-            if (key.compareTo(h.key) == 0) {
-                Node x = min(h.right);
-                h.key = x.key;
-                h.val = x.val;
-                // h.val = get(h.right, min(h.right).key);
-                // h.key = min(h.right).key;
-                h.right = deleteMin(h.right);
+        private void preOrder(Node tree) {
+            if(tree != null) {
+                System.out.print(tree.kv +" ");
+                preOrder(tree.l);
+                preOrder(tree.r);
             }
-            else h.right = delete(h.right, key);
         }
-        return balance(h);
-    }
 
-    /***************************************************************************
-     *  Red-black tree helper functions.
-     ***************************************************************************/
-
-    // make a left-leaning link lean to the right
-    private Node rotateRight(Node h) {
-        // assert (h != null) && isRed(h.left);
-        Node x = h.left;
-        h.left = x.right;
-        x.right = h;
-        x.color = x.right.color;
-        x.right.color = RED;
-        x.size = h.size;
-        h.size = size(h.left) + size(h.right) + 1;
-        return x;
-    }
-
-    // make a right-leaning link lean to the left
-    private Node rotateLeft(Node h) {
-        // assert (h != null) && isRed(h.right);
-        Node x = h.right;
-        h.right = x.left;
-        x.left = h;
-        x.color = x.left.color;
-        x.left.color = RED;
-        x.size = h.size;
-        h.size = size(h.left) + size(h.right) + 1;
-        return x;
-    }
-
-    // flip the colors of a node and its two children
-    private void flipColors(Node h) {
-        // h must have opposite color of its two children
-        // assert (h != null) && (h.left != null) && (h.right != null);
-        // assert (!isRed(h) &&  isRed(h.left) &&  isRed(h.right))
-        //    || (isRed(h)  && !isRed(h.left) && !isRed(h.right));
-        h.color = !h.color;
-        h.left.color = !h.left.color;
-        h.right.color = !h.right.color;
-    }
-
-    // Assuming that h is red and both h.left and h.left.left
-    // are black, make h.left or one of its children red.
-    private Node moveRedLeft(Node h) {
-        // assert (h != null);
-        // assert isRed(h) && !isRed(h.left) && !isRed(h.left.left);
-
-        flipColors(h);
-        if (isRed(h.right.left)) {
-            h.right = rotateRight(h.right);
-            h = rotateLeft(h);
-            flipColors(h);
+        public void preOrder() {
+            preOrder(_r);
+            System.out.println();
         }
-        return h;
-    }
 
-    // Assuming that h is red and both h.right and h.right.left
-    // are black, make h.right or one of its children red.
-    private Node moveRedRight(Node h) {
-        // assert (h != null);
-        // assert isRed(h) && !isRed(h.right) && !isRed(h.right.left);
-        flipColors(h);
-        if (isRed(h.left.left)) {
-            h = rotateRight(h);
-            flipColors(h);
+        public Node search(K key) {
+            return find(_r, key);
         }
-        return h;
-    }
 
-    // restore red-black tree invariant
-    private Node balance(Node h) {
-        // assert (h != null);
+        private Node find(Node x,K key) {
+            if (x==null)
+                return x;
 
-        if (isRed(h.right))                      h = rotateLeft(h);
-        if (isRed(h.left) && isRed(h.left.left)) h = rotateRight(h);
-        if (isRed(h.left) && isRed(h.right))     flipColors(h);
+            if (key.hashCode() < x.kv.key.hashCode())
+                return find(x.l, key);
+            else if (key.hashCode() > x.kv.key.hashCode())
+                return find(x.r, key);
+            else
+                return x;
+        }
 
-        h.size = size(h.left) + size(h.right) + 1;
-        return h;
-    }
+        public int maxHeight(Node top) {
+            if(top == null) { return -1; }
+            else if(top.l == null && top.r == null){ return 0; }
+            else {
+                if (top.l != null & top.r != null) { return 1 + Math.max(maxHeight(top.l), maxHeight(top.r)); }
+                if(top.l == null) { return 1 + maxHeight(top.r); }
+                if(top.r == null) { return 1 + maxHeight(top.l); }
+                return 0;
+            }
+        }
 
-    /***************************************************************************
-     *  Utility functions.
-     ***************************************************************************/
+        private void insert(Node n) {
+            int max_height = maxHeight(this._r);
+            System.out.println("before insertion Height: "+maxHeight(_r));
+            boolean triggered = false;
+            if(max_height == -1) { // Means the tree is null, simply create a root
+                _r = n;
+                _r.c = false;
+            }else if(max_height == 0) { // There is a root, but left and right are both null
+                BSTInsert(n, _r);
+            }else if(max_height == 1) {
+                BSTInsert(n, _r);
+                int h = maxHeight(_r);
+                if(h != 1) { triggered = true;}
+            }else {
+                BSTInsert(n, _r);
+                triggered = true;
+            }
+            System.out.println("After insertion Height: "+maxHeight(_r));
 
-    /**
-     * Returns the height of the BST (for debugging).
-     * @return the height of the BST (a 1-node tree has height 0)
-     */
-    public int height() {
-        return height(root);
-    }
-    private int height(Node x) {
-        if (x == null) return -1;
-        return 1 + Math.max(height(x.left), height(x.right));
-    }
+            if(triggered) {
+                boolean uncle_color = false;
+                if(getUncle(n) == null) {
+                }else { uncle_color = getUncle(n).c; }
+                if(uncle_color) {
+                    System.out.println("recolouring");
+                    recursiveRecolour(n);
+                }
+                else {
+                    reshape(n);
+                    System.out.println("Height after reshaping:" + maxHeight(_r));
+                }
+            }
+        }
 
-    /***************************************************************************
-     *  Ordered symbol table methods.
-     ***************************************************************************/
+        public void recursiveRecolour(Node node) {
+            if(node.kv.key.hashCode() == _r.kv.key.hashCode()) {
+                node.c = false;
+                return;
+            }else {
+                Node uncle = getUncle(node);
+                Node parent = getParent(node);
+                Node grandparent = getParent(getParent(node));
+                if(parent.c) {
+                    if(uncle.c) {
+                        uncle.c = !uncle.c;
+                        grandparent.c = !grandparent.c;
+                        parent.c = !parent.c;
+                        recursiveRecolour(grandparent);
+                    }else {reshape(node);}
+                }
+            }
+        }
 
-    /**
-     * Returns the smallest key in the symbol table.
-     * @return the smallest key in the symbol table
-     * @throws NoSuchElementException if the symbol table is empty
-     */
-    public Key min() {
-        if (isEmpty()) throw new NoSuchElementException("calls min() with empty symbol table");
-        return min(root).key;
-    }
+        public void reshape(Node n) {
+            System.out.println("reshaping");
+            Node uncle = getUncle(n);
+            Node parent = getParent(n);
+            Node grandparent = getParent(getParent(n));
+            int cmp_pg = parent.kv.key.hashCode() - grandparent.kv.key.hashCode();
+            int cmp_np = n.kv.key.hashCode() - parent.kv.key.hashCode();
+            if(cmp_pg < 0 && cmp_np < 0) { // n < parent < grandparent
+                System.out.println("LL");
+                LLRotation(uncle, parent, grandparent, n);
+            }
+            else if(cmp_pg < 0 && cmp_np > 0) { // parent < n < grandparent
+                System.out.println("LR");
+                LRRotation(uncle, parent, grandparent, n);
+            }
+            else if(cmp_pg > 0 && cmp_np < 0) { // parent > n > grandparent
+                System.out.println("RL");
+                RLRotation(uncle, parent, grandparent, n);
+            }
+            else { // parent > n > grandparent
+                System.out.println("RR");
+                RRRotation(uncle, parent, grandparent, n);
+            }
+        }
 
-    // the smallest key in subtree rooted at x; null if no such key
-    private Node min(Node x) {
-        // assert x != null;
-        if (x.left == null) return x;
-        else                return min(x.left);
-    }
+        public void LLRotation(Node uncle, Node parent, Node grandparent, Node node) {
+            parent.c = !parent.c;
+            grandparent.c = !grandparent.c;
+            if(grandparent.kv.key.hashCode() < _r.kv.key.hashCode()) {
+                Node temp_p_r = parent.r;
+                parent.r = grandparent;
+                grandparent.l = temp_p_r;
+                if(temp_p_r != null) {
+                    temp_p_r.p = grandparent;
+                }
+                grandparent.p = parent;
+                _r = parent;
+            }
+            else{
+                Node greatgrandparent = getParent(grandparent);
+                Node temp_p_r = parent.r;
+                parent.r = grandparent;
+                grandparent.l = temp_p_r;
+                if(temp_p_r != null) {
+                    temp_p_r.p = grandparent;
+                }
+                parent.p = greatgrandparent;
+                grandparent.p = parent;
+                if(grandparent.kv.key.hashCode() < greatgrandparent.kv.key.hashCode()) {
+                    greatgrandparent.l = parent;
+                }else {
+                    greatgrandparent.r = parent;
+                }
 
-    /**
-     * Returns the largest key in the symbol table.
-     * @return the largest key in the symbol table
-     * @throws NoSuchElementException if the symbol table is empty
-     */
-    public Key max() {
-        if (isEmpty()) throw new NoSuchElementException("calls max() with empty symbol table");
-        return max(root).key;
-    }
+            }
+        }
 
-    // the largest key in the subtree rooted at x; null if no such key
-    private Node max(Node x) {
-        // assert x != null;
-        if (x.right == null) return x;
-        else                 return max(x.right);
-    }
+        public void LRRotation(Node uncle, Node parent, Node grandparent, Node node) {
+            Node temp_n_l = node.l;
+            parent.r = temp_n_l;
+            parent.p = node;
+            node.l = parent;
+            node.p = grandparent;
+            grandparent.l = node;
+            LLRotation(uncle, node, grandparent, parent); // Note the order has changed.
+        }
 
-    private void preOrder(Node tree) {
-        if(tree != null && tree.key != null) {
-            System.out.print(tree.key +": "+ tree.val +"(" + tree.color +")" + " ");
-            preOrder(tree.left);
-            preOrder(tree.right);
+        public void RRRotation(Node uncle, Node parent, Node grandparent, Node node) {
+            parent.c = !parent.c;
+            grandparent.c = !grandparent.c;
+
+            if(grandparent.kv.key.hashCode() == _r.kv.key.hashCode()) {
+                Node temp_p_l = parent.l;
+                parent.l = grandparent;
+                grandparent.r = temp_p_l;
+                if(temp_p_l != null) {
+                    temp_p_l.p = grandparent;
+                }
+                grandparent.p = parent;
+                _r = parent;
+            }
+            else{
+                Node greatgrandparent = getParent(grandparent);
+                Node temp_p_l = parent.l;
+                parent.l = grandparent;
+                grandparent.r = temp_p_l;
+                if(temp_p_l != null) {
+                    temp_p_l.p = grandparent;
+                }
+                parent.p = greatgrandparent;
+                grandparent.p = parent;
+                if(grandparent.kv.key.hashCode() < greatgrandparent.kv.key.hashCode()) {
+                    greatgrandparent.l = parent;
+                }else {
+                    greatgrandparent.r = parent;
+                }
+            }
+        }
+
+        public void RLRotation(Node uncle, Node parent, Node grandparent, Node node) {
+            Node temp_n_r = node.r;
+            parent.l = temp_n_r;
+            parent.p = node;
+            node.r = parent;
+            node.p = grandparent;
+            grandparent.r = node;
+            RRRotation(uncle, node, grandparent, parent);
+        }
+
+        public Node getParent(Node node){
+            if(node.kv.key.hashCode() == _r.kv.key.hashCode()) { // Means the given node is actually the root
+                return null;
+            }
+            return node.p;
+        }
+
+        public Node getUncle(Node node){
+            if(node == null) {
+                return null;
+            }
+            if (node.kv.key.hashCode() < _r.kv.key.hashCode()) { // The given node is the root
+                return null;
+            }
+            else if (getParent(node).kv.key.hashCode() == _r.kv.key.hashCode()) { // The second level
+                return null;
+            }else {
+                Node grandparent = getParent(getParent(node));
+                Node uncle = null;
+                if(node.kv.key.hashCode() < grandparent.kv.key.hashCode()) { // The given node is on the left of grandparent
+                    uncle = grandparent.r;
+                }else {
+                    uncle = grandparent.l;
+                }
+                return uncle;
+            }
+        }
+
+        public void BSTInsert(Node node, Node top) {
+            if (top == null) { top = node; }
+            if(node.kv.key.hashCode() == top.kv.key.hashCode()) { return; }
+            else if(node.kv.key.hashCode() < top.kv.key.hashCode()) {
+                if (top.l == null) {
+                    top.l = node;
+                    node.p = top;
+                }else {
+                    BSTInsert(node, top.l);
+                }
+            }else {
+                if (top.r == null) {
+                    top.r = node;
+                    node.p = top;
+                }else {
+                    BSTInsert(node, top.r);
+                }
+            }
+        }
+
+        public void removeWithTempFix(K key, Node top) {
+
+            if(top == null) {
+                return;
+            }
+
+            if(key.hashCode() == top.kv.key.hashCode()) {
+                System.out.println("We found the key");
+                if(top.l == null && top.r == null) {
+                    if(top.kv.key.hashCode() == _r.kv.key.hashCode()) { // The one being removed is root
+                        System.out.println("Root of the tree is being removed");
+                        _r = null; // We don't care about the color
+                    }else { // The one being removed is not root
+                        Node topParent = top.p;
+                        if(top.kv.key.hashCode() < topParent.kv.key.hashCode()) { // On the left of parent
+                            if(!top.c) { // The node is black
+                                System.out.println("Left: we are in case 3");
+                                topParent.l = null;
+                                evaluateAndFix_Left(topParent);
+                            }else {
+                                System.out.println("Left: we are in case 1");
+                                top.p = null;
+                                topParent.l = null;
+                            }
+                        }else {
+                            if(!top.c) { // The node is black
+                                System.out.println("Right: we are in case 2");
+                                topParent.r = null;
+                                evaluateAndFix_Right(topParent);
+                            }else {
+                                System.out.println("Right: we are in case 1");
+                                top.p = null;
+                                topParent.r = null;
+                            }
+                        }
+                    }
+                }
+
+                else if(top.r == null) {
+                    System.out.println("the right of the node with given key is null");
+                    Node max_left = findBiggest(top.l); // Node with max value on the left
+                    KVPair temp_kv = max_left.kv; // Swap the key
+                    Node max_left_p = max_left.p;
+                    Node max_left_left = max_left.l; // left node of the max
+
+                    if(max_left_left == null) {
+                        if(!max_left.c) { // The actual one being deleted is black (Case 3, further fix needed)
+                            max_left_p.r = null;
+                            evaluateAndFix_Right(max_left_p);
+                        }else { // Red otherwise (Case 1)
+                            if(max_left.kv.key.hashCode() > max_left_p.kv.key.hashCode()) { // The left of the top(target) is a leaf
+                                max_left_p.r = null;
+                                max_left.p = null;
+                            }else {
+                                max_left_p.l = null;
+                                max_left.p = null;
+                            }
+                        }
+                    }else {
+                        max_left_p.r = max_left_left;
+                        max_left_left.p = max_left_p;
+                        max_left.p = null;
+                        max_left.l = null; // Probably not necessary
+                        max_left_left.c = false; // Recolor to black
+                    }
+                    top.kv = temp_kv;
+
+
+                }else {
+                    System.out.println("the left of the node with given key is null");
+                    Node min_right = findSmallest(top.r); // Node with min value on the right
+                    KVPair temp_kv = min_right.kv; // Swap the key
+                    Node min_right_p = min_right.p;
+                    Node min_right_right = min_right.r; // right node of the min
+
+                    if(min_right_right == null) {
+                        if(!min_right.c) { // The actual one being deleted is black (Case 3, further fix needed)
+                            min_right_p.l = null;
+                            evaluateAndFix_Left(min_right_p);
+                        }else { // Red otherwise (Case 1)
+                            if(min_right.kv.key.hashCode() > min_right_p.kv.key.hashCode()) { // The right of the top(target) is a leaf
+                                min_right_p.r = null;
+                                min_right.p = null;
+                            }else {
+                                min_right_p.l = null;
+                                min_right.p = null;
+                            }
+                        }
+                    }else { // If min_right_right is not null, it can only be a red leaf (Case 2)
+                        min_right_p.l = min_right_right;
+                        min_right_right.p = min_right_p;
+                        min_right.p = null;
+                        min_right.r = null; // Probably not necessary
+                        min_right_right.c = false; // Recolor to black
+                    }
+
+                    top.kv = temp_kv;
+                }
+
+            }else if(key.hashCode() < top.kv.key.hashCode()){
+                removeWithTempFix(key, top.l);
+            }else {
+                removeWithTempFix(key, top.r);
+            }
+        }
+
+        // Here we have a new concept 'double black', which is used to maintain the black height temporarily
+        // We need to remove the 'double black' by either coloring some possible red node to black
+        // Or push the double black up until the root, where we can simply make the 'double' a 'single'
+
+        public void evaluateAndFix_Left(Node parent) {
+            // Note that the right of the parent cannot be null
+            Node sibling = parent.r;
+
+            // Case 3.1.1  P's color doesn't matter
+            if(sibling.r != null && sibling.r.c) {
+                System.out.println("Left: we are in case 3.1.1");
+                sibling.p = null;
+                parent.r = sibling.l;
+                if(sibling.l != null) {
+                    sibling.l.p = parent;
+                }
+                parent.p = sibling;
+                sibling.l = parent;
+                sibling.r.c = false;
+                sibling.c = parent.c;
+                parent.c = false;
+                if(parent.kv.key.hashCode() != _r.kv.key.hashCode()) { // Parent is not root
+                    Node grandParent = parent.p;
+                    sibling.p = grandParent;
+
+                    if(parent.kv.key.hashCode() < grandParent.kv.key.hashCode()) {
+                        grandParent.l = sibling;
+                    }else {
+                        grandParent.r = sibling;
+                    }
+                }else {
+                    _r = sibling;
+                }
+            }
+            // Case 3.1.2  P's color doesn't matter
+            else if(sibling.l != null && sibling.l.c) {
+                System.out.println("Left: we are in case 3.1.2");
+                Node nephew = sibling.l;
+                nephew.p = null;
+                parent.r = nephew.l;
+                if(nephew.l != null) {
+                    nephew.l.p = parent;
+                }
+                sibling.l = nephew.r;
+                if(nephew.r != null) {
+                    nephew.r.p = sibling;
+                }
+                nephew.l = parent;
+                nephew.r = sibling;
+                parent.p = nephew;
+                sibling.p = nephew;
+                nephew.c = parent.c;
+                parent.c = false;
+                if(parent.kv.key.hashCode() != _r.kv.key.hashCode()) { // Parent is not root
+                    Node grandParent = parent.p;
+                    nephew.p = grandParent;
+
+                    if(parent.kv.key.hashCode() < grandParent.kv.key.hashCode()) {
+                        grandParent.l = nephew;
+                    }else {
+                        grandParent.r = nephew;
+                    }
+                }else {
+                    _r = nephew;
+                }
+            }
+            else if((sibling.l == null && sibling.r == null && parent.c) || (sibling.l != null && sibling.r != null && !sibling.l.c && !sibling.r.c && parent.c)) {
+                System.out.println("Left: we are in case 3.2.1");
+                parent.c = false;
+                sibling.c = true;
+            }
+            else if((sibling.l == null && sibling.r == null && !parent.c && !sibling.c) || (sibling.l != null && sibling.r != null && !sibling.l.c && !sibling.r.c && !parent.c && !sibling.c)){
+                System.out.println("Left: we are in case 3.2.2");
+                sibling.c = true;
+                Node grandParent = parent.p;
+                if(parent.kv.key.hashCode() == _r.kv.key.hashCode()) {
+                    return;
+                }else {
+                    if(parent.kv.key.hashCode() < grandParent.kv.key.hashCode()) {
+                        evaluateAndFix_Left(grandParent);
+                    }else {
+                        evaluateAndFix_Right(grandParent);
+                    }
+                }
+            }
+            else {
+                System.out.println("Left: we are in case 3.3");
+                sibling.p = null;
+                parent.r = sibling.l;
+                sibling.l.p = parent;
+                sibling.l = parent;
+                parent.r.c = true;
+                sibling.c = false;
+                if(parent.kv.key.hashCode() != _r.kv.key.hashCode()) { // Parent is not root
+                    Node grandParent = parent.p;
+                    sibling.p = grandParent;
+                    if(parent.kv.key.hashCode() < grandParent.kv.key.hashCode()) {
+                        grandParent.l = sibling;
+                    }else {
+                        grandParent.r = sibling;
+                    }
+                }else {
+                    _r = sibling;
+                }
+                parent.p = sibling;
+            }
+        }
+
+
+        public void evaluateAndFix_Right(Node parent) {
+            Node sibling = parent.l;
+            if(sibling.l != null && sibling.l.c) {
+                System.out.println("Right: we are in case 3.1.1");
+                sibling.p = null;
+                parent.l = sibling.r;
+                if(sibling.r != null) {
+                    sibling.r.p = parent;
+                }
+                parent.p = sibling;
+                sibling.r = parent;
+                sibling.l.c = false;
+                sibling.c = parent.c;
+                parent.c = false;
+                if(parent.kv.key.hashCode() != _r.kv.key.hashCode()) { // Parent is not root
+                    Node grandParent = parent.p;
+                    sibling.p = grandParent;
+
+                    if(parent.kv.key.hashCode() < grandParent.kv.key.hashCode()) {
+                        grandParent.l = sibling;
+                    }else {
+                        grandParent.r = sibling;
+                    }
+                }else {
+                    _r = sibling;
+                }
+            }
+            else if(sibling.r != null && sibling.r.c) {
+                System.out.println("Right: we are in case 3.1.2");
+                Node nephew = sibling.r;
+                nephew.p = null;
+                parent.l = sibling.r;
+                if(sibling.r != null) {
+                    sibling.r.p = parent;
+                }
+                sibling.r = sibling.l;
+                if(sibling.l != null) {
+                    sibling.l.p = parent;
+                }
+                nephew.r = parent;
+                nephew.l = sibling;
+                parent.p = nephew;
+                sibling.p = nephew;
+                nephew.c = parent.c;
+                parent.c = false;
+                if(parent.kv.key.hashCode() != _r.kv.key.hashCode()) { // Parent is not root
+                    Node grandParent = parent.p;
+                    nephew.p = grandParent;
+
+                    if(parent.kv.key.hashCode() < grandParent.kv.key.hashCode()) {
+                        grandParent.l = nephew;
+                    }else {
+                        grandParent.r = nephew;
+                    }
+                }else {
+                    _r = nephew;
+                }
+            }
+            // Case 3.2.1
+            else if((sibling.l == null && sibling.r == null && parent.c) || (sibling.l != null && sibling.r != null && !sibling.l.c && !sibling.r.c && parent.c)) {
+                System.out.println("Right: we are in case 3.2.1");
+                parent.c = false;
+                sibling.c = true;
+            }
+            // Case 3.2.2
+            else if((sibling.l == null && sibling.r == null && !parent.c && !sibling.c) || (sibling.l != null && sibling.r != null && !sibling.l.c && !sibling.r.c && !parent.c && !sibling.c)){
+                System.out.println("Right: we are in case 3.2.2");
+                sibling.c = true;
+                Node grandParent = parent.p;
+
+                if(parent.kv.key.hashCode() == _r.kv.key.hashCode()) {
+                    return;
+                }else {
+                    if(parent.kv.key.hashCode() < grandParent.kv.key.hashCode()) {
+                        evaluateAndFix_Left(grandParent);
+                    }else {
+                        evaluateAndFix_Right(grandParent);
+                    }
+                }
+            }
+
+            // Case 3.3
+            else { // Parent is black, sibling is red with two black child
+                System.out.println("Right: we are in case 3.3");
+                sibling.p = null;
+                parent.l = sibling.r;
+                // sibling.l is nevey null
+                sibling.r.p = parent;
+
+                sibling.r = parent;
+
+                parent.l.c = true;
+                sibling.c = false;
+
+                if(parent.kv.key.hashCode() != _r.kv.key.hashCode()) { // Parent is not root
+                    Node grandParent = parent.p;
+                    sibling.p = grandParent;
+
+                    if(parent.kv.key.hashCode() < grandParent.kv.key.hashCode()) {
+                        grandParent.l = sibling;
+                    }else {
+                        grandParent.r = sibling;
+                    }
+                }else {
+                    _r = sibling;
+                }
+                parent.p = sibling;
+
+            }
+        }
+
+
+        // Given a node, find the Node with biggest hashCode among its offspring
+        public Node findBiggest(Node node) { // Left biggest
+            if(node.r == null) {
+                return node;
+            }else {
+                return findBiggest(node.r);
+            }
+        }
+
+        public Node findSmallest(Node node) { // Right biggest
+            if(node.l == null) {
+                return node;
+            }else {
+                return findSmallest(node.l);
+            }
         }
     }
 
-    public void preOrder() {
-        preOrder(root);
-        System.out.println();
+
+    public void put(K key, V value) {
+        KVPair kv = new KVPair(key, value);
+        Node node = new Node(kv);
+        rbTree.insert(node);
     }
 
-    private void inOrder(Node tree) {
-        if(tree != null && tree.key != null) {
-            inOrder(tree.left);
-            System.out.print(tree.key +": "+ tree.val +"(" + tree.color +")" + " ");
-            inOrder(tree.right);
+
+    public void remove(K key) {
+        Node result = rbTree.search(key);
+        if(result != null) {
+            rbTree.removeWithTempFix(key, rbTree._r);
         }
     }
 
-    public void inOrder() {
-        inOrder(root);
-        System.out.println();
-    }
+
 }
