@@ -1,3 +1,4 @@
+
 public class Token {
     public enum Type {Unknown, Lit, Add, Minus, Multiply, Divide, LeftBracket, RightBracket};
     private String _token = "";
