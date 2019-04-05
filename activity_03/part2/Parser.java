@@ -1,45 +1,50 @@
-// u6174243 Qingzheng Xu
-// u6683369 Jinming Dong
-// u6250866 Yu Wu
-// u6250082 Xuguang Song
 
 public class Parser {
 
     Tokenizer _tokenizer;
-
+    
     public Parser(Tokenizer tokenizer) {
         _tokenizer = tokenizer;
     }
 
     /*
-        <exp>    ::= <term> | <term> + <exp> | <term> - <exp>
-        <term>   ::= <integer literal>
+        <exp>    ::= <term> | <exp> + <term> | <exp> - <term>
+        <term>   ::= <factor> | <term> * <factor> | <term> / <factor>
+        <factor> ::= <integer literal> | (<exp>)
      */
     public Exp parse() {
-        // TODO: Implement this
-
-        while(_tokenizer.hasNext()) {
-            Token t = _tokenizer.takeNext();
-            if (t.type() != Token.Type.Lit)
-                return null;
-            if (_tokenizer.hasNext()) {
-                Token t2 = _tokenizer.takeNext();
-                if (t2.type() == Token.Type.Add) {
-                    return new Exp(new Term(new Factor(new Lit(Integer.parseInt(t.token())))), true, this.parse());
-                } else if (t2.type() == Token.Type.Minus) {
-                    return new Exp(new Term(new Factor(new Lit(Integer.parseInt(t.token())))), false, this.parse());
-                }
-            } else {
-                return new Exp(new Term(new Factor(new Lit(Integer.parseInt(t.token())))));
-            }
-
-
-
+        // Parse term
+        Exp exp = new Exp(parseTerm());
+        // Check if more terms to parse
+        while (_tokenizer.next() != null &&  (_tokenizer.next().type() == Token.Type.Add || _tokenizer.next().type() == Token.Type.Minus)) {
+            Token.Type op = _tokenizer.takeNext().type();
+            // Merge previous term into factor
+            exp = new Exp(exp, op == Token.Type.Add ? Operation.Add : Operation.Sub, parseTerm());
 
         }
 
-        return null;
+        return exp;
     }
 
-}
+    public Term parseTerm() {
+        // TODO: Implement this
+        Term term = new Term(parseFactor());
+        while (_tokenizer.next() != null && (_tokenizer.next().type() == Token.Type.Multiply|| _tokenizer.next().type() == Token.Type.Divide)){
+            Token.Type op = _tokenizer.takeNext().type();
+            term = new Term(term,op == Token.Type.Multiply ? Operation.Mult : Operation.Div,parseFactor());
+        }
+        return term;
+    }
 
+    public Factor parseFactor() {
+        // TODO: Implement this
+        if (_tokenizer.next() != null && _tokenizer.next().type() == Token.Type.LeftBracket){
+            _tokenizer.takeNext();
+            Factor factor = new Factor(parse());
+            _tokenizer.takeNext();
+            return factor;
+        }else {
+            return new Factor(new Lit(Integer.parseInt(_tokenizer.takeNext().token())));
+        }
+    }
+}
