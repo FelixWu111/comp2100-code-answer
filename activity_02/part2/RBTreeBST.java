@@ -420,4 +420,22 @@ public class RBTreeBST <Key extends Comparable<Key>, Value> {
         inOrder(root);
         System.out.println();
     }
+
+    public static void main(String[] args) {
+
+        System.out.println("Construct a red-black tree.");
+        RBTreeBST a = new RBTreeBST();
+        a.put('a',1);
+        a.put('b',2);
+        System.out.println("Pre-order traversal result of the tree:");
+        a.preOrder();
+        a.delete('a');
+        System.out.println("Pre-order traversal result of the tree:");
+        a.preOrder();
+        a.put('c',3);
+        System.out.println("Pre-order traversal result of the tree:");
+        a.preOrder();
+
+    }
 }
+
