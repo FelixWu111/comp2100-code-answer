@@ -1,4 +1,3 @@
-
 public class ParserDemo {
 
     private static Tokenizer tokenizer;

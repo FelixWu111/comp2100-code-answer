@@ -17,7 +17,7 @@ public class TokenizerDemo {
         tokenizer = new Tokenizer();
         String[] equations = {"1 + 2 ",
                 "10 - 4 - 4",
-                "12 * 5 - 3",
+                "12 * (5 - 3)",
                 "3 / 4 + 4 - 1"};
 
         for(String equation : equations)
