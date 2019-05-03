@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1afc730-84a9-4aab-9e1f-01583eea6447" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/activity_03/part2/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/activity_03/part2/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/activity_04/BinarySearchTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/activity_04/BinarySearchTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/comp2100-2019s1-code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/comp2100-2019s1-code.iml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -13,11 +15,50 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/activity_03/part2/Parser.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
-              <caret line="27" column="29" lean-forward="true" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="29" />
+            <state relative-caret-position="476">
+              <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/activity_04/BinarySearchTree.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="36">
+              <caret line="14" column="31" lean-forward="true" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+              <folding>
+                <element signature="e#696#697#0" expanded="true" />
+                <element signature="e#733#734#0" expanded="true" />
+                <element signature="e#769#770#0" expanded="true" />
+                <element signature="e#824#825#0" expanded="true" />
+                <element signature="e#2607#2608#0" expanded="true" />
+                <element signature="e#2643#2644#0" expanded="true" />
+                <element signature="e#2927#2928#0" expanded="true" />
+                <element signature="e#2956#2957#0" expanded="true" />
+                <element signature="e#3519#3520#0" expanded="true" />
+                <element signature="e#3551#3552#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lab_05/Term.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="19" column="23" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/activity_04/BinarySearchTreeDemo.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="396">
+              <caret line="25" column="45" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -78,6 +119,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>insert</find>
+      <find>getkey</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -109,6 +151,10 @@
         <option value="$PROJECT_DIR$/Parser/Tokenizer.java" />
         <option value="$PROJECT_DIR$/Parser/Test.java" />
         <option value="$PROJECT_DIR$/Parser/CalcluateTree/Lit.java" />
+        <option value="$PROJECT_DIR$/activity_04/BinarySearchTree2.java" />
+        <option value="$PROJECT_DIR$/activity_04/BinarySearchTreeDemo.java" />
+        <option value="$PROJECT_DIR$/activity_04/BinarySearchTree.java" />
+        <option value="$PROJECT_DIR$/lab_05/Term.java" />
       </list>
     </option>
   </component>
@@ -129,6 +175,32 @@
               <item name="comp2100-2019s1-code" type="b2602c69:ProjectViewProjectNode" />
               <item name="comp2100-2019s1-code" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="comp2100-2019s1-code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="comp2100-2019s1-code" type="462c0819:PsiDirectoryNode" />
+              <item name="activity_02" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="comp2100-2019s1-code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="comp2100-2019s1-code" type="462c0819:PsiDirectoryNode" />
+              <item name="activity_02" type="462c0819:PsiDirectoryNode" />
+              <item name="part1" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="comp2100-2019s1-code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="comp2100-2019s1-code" type="462c0819:PsiDirectoryNode" />
+              <item name="activity_03" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="comp2100-2019s1-code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="comp2100-2019s1-code" type="462c0819:PsiDirectoryNode" />
+              <item name="activity_04" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="comp2100-2019s1-code" type="b2602c69:ProjectViewProjectNode" />
+              <item name="comp2100-2019s1-code" type="462c0819:PsiDirectoryNode" />
+              <item name="lab_05" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -146,7 +218,7 @@
     <property name="hindentPath" value="/usr/local/bin/hindent" />
     <property name="hlintFlags" value="" />
     <property name="hlintPath" value="/usr/local/bin/hlint" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Lab4" />
+    <property name="last_opened_file_path" value="$USER_HOME$/comp1100/comp2100-2019s1-code-master--master" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="stylishHaskellFlags" value="" />
     <property name="stylishHaskellPath" value="/usr/local/bin/stylish-haskell" />
@@ -163,9 +235,17 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ParserDemo">
+  <component name="RunManager" selected="Application.BinarySearchTreeDemo">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BinarySearchTreeDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="BinarySearchTreeDemo" />
+      <module name="comp2100-2019s1-code" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -196,14 +276,6 @@
     </configuration>
     <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Test" />
-      <module name="comp2100-2019s1-code" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TokenizerDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="TokenizerDemo" />
       <module name="comp2100-2019s1-code" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
@@ -243,11 +315,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.BinarySearchTreeDemo" />
         <item itemvalue="Application.ParserDemo" />
         <item itemvalue="Application.Test" />
         <item itemvalue="Application.RBTreeBSTDemo" />
         <item itemvalue="Application.RBTreeDemo" />
-        <item itemvalue="Application.TokenizerDemo" />
       </list>
     </recent_temporary>
   </component>
@@ -311,7 +383,14 @@
       <option name="project" value="LOCAL" />
       <updated>1554433263796</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Finished activity04">
+      <created>1556775267145</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1556775267145</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -332,7 +411,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32928178" />
+      <window_info anchor="bottom" id="Messages" order="10" visible="true" weight="0.32928178" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -343,7 +422,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Finished activity03" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finished activity03" />
+    <MESSAGE value="Finished activity04" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished activity04" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/activity_02/part1/RemovePrintDemo.java">
@@ -462,8 +542,8 @@
     <entry file="file://$PROJECT_DIR$/Parser/CalcluateTree/Lit.java" />
     <entry file="file://$PROJECT_DIR$/activity_03/part2/Parser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="27" column="29" lean-forward="true" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="29" />
+        <state relative-caret-position="476">
+          <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
         </state>
       </provider>
     </entry>
@@ -500,6 +580,39 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="468">
           <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/activity_04/BinarySearchTreeDemo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="25" column="45" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/activity_04/BinarySearchTree.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="36">
+          <caret line="14" column="31" lean-forward="true" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+          <folding>
+            <element signature="e#696#697#0" expanded="true" />
+            <element signature="e#733#734#0" expanded="true" />
+            <element signature="e#769#770#0" expanded="true" />
+            <element signature="e#824#825#0" expanded="true" />
+            <element signature="e#2607#2608#0" expanded="true" />
+            <element signature="e#2643#2644#0" expanded="true" />
+            <element signature="e#2927#2928#0" expanded="true" />
+            <element signature="e#2956#2957#0" expanded="true" />
+            <element signature="e#3519#3520#0" expanded="true" />
+            <element signature="e#3551#3552#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lab_05/Term.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="19" column="23" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
         </state>
       </provider>
     </entry>

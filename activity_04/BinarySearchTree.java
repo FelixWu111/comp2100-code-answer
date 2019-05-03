@@ -24,6 +24,7 @@ public class BinarySearchTree {
         public String toString() {
             return Integer.toString(_value);
         }
+
     }
 
     public BinarySearchTree() {
@@ -31,7 +32,7 @@ public class BinarySearchTree {
         height = 0;
     }
 
-    /*@ 
+    /*@
         normal_behaviour
             requires key >= 0 && key <= 100;
         also
@@ -41,11 +42,20 @@ public class BinarySearchTree {
     @*/
     public boolean find(int key) throws IllegalArgumentException {
         // TODO: implement find function which satisfies JML specification
-        
+        if (key > 100 || key < 0) throw (new IllegalArgumentException());
+
+        Node x = this.root;
+        while (x != null) {
+            if (key == x.getKey()) return true;
+            else if (key < x.getKey()) x = x._left;
+            else x = x._right;
+        }
+        return false;
     }
 
     // TODO: write pre-condition of _insert
-    /*@
+    /*@ normal_behavior
+            requires z._left == null && z._right == null && z._parent == null
     @*/
     private void _insert(BinarySearchTree bst, Node z) {
         /*@ nullable @*/ Node y = null;
@@ -54,7 +64,7 @@ public class BinarySearchTree {
         // find the position to insert.
         while (x != null) {
             y = x;
-            
+
             if (z._value < x._value)
                 x = x._left;
             else
@@ -73,20 +83,22 @@ public class BinarySearchTree {
     }
 
     // TODO: write post-condition of insert
-    /*@
+    /*@ ensures
+          root != null;
+          height <= /old(height)+1;
     @*/
     public void insert(int key) {
         _insert(this, new Node(key));
         height = computeHeight(root);
     }
-    
+
     //@ pure;
     private static int max(int a, int b) {
         return a > b ? a : b;
     }
-    
+
     //@ measured_by \not_specified;
-    //@ requires true;    
+    //@ requires true;
     private int computeHeight(Node tree) {
         if (tree != null)
             return 1 + max(computeHeight(tree._left), computeHeight(tree._right));
