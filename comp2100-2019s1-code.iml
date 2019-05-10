@@ -10,6 +10,10 @@
       <sourceFolder url="file://$MODULE_DIR$/activity_03/part2" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Parser" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/activity_04" isTestSource="false" />
+<<<<<<< HEAD
+=======
+      <sourceFolder url="file://$MODULE_DIR$/lab_05" isTestSource="false" />
+>>>>>>> ee1ebef163ab3287be7abff73438e2323dd96a5f
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
