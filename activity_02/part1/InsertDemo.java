@@ -1,3 +1,5 @@
+import act4.BinarySearchTree;
+
 public class InsertDemo {
 
     public static void main(String[] args) {

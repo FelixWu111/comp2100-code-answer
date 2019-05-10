@@ -1,8 +1,10 @@
+package act4;
+import BinarySearchTree1;
 
 public class BinarySearchTreeDemo {
 
     public static void main(String[] args) {
-        BinarySearchTree tree = new BinarySearchTree();
+        BinarySearchTree1 tree = new BinarySearchTree1();
         tree.insert(7);
         tree.insert(3);
         tree.insert(1);
@@ -38,7 +40,7 @@ public class BinarySearchTreeDemo {
         System.out.println("");
         
         System.out.println("BST height:");
-        BinarySearchTree tree1 = new BinarySearchTree();
+        BinarySearchTree1 tree1 = new BinarySearchTree1();
         tree1.insert(4);
         tree1.insert(2);
         tree1.insert(6);
@@ -48,7 +50,7 @@ public class BinarySearchTreeDemo {
         tree1.insert(7);
         System.out.println("BST 1 pre-order result is: " + tree1.nlr());
         System.out.println("          BST 1 height is: " + Integer.toString(tree1.getHeight()));
-        BinarySearchTree tree2 = new BinarySearchTree();
+        BinarySearchTree1 tree2 = new BinarySearchTree1();
         for(int i=1; i<=7; ++i) {
             tree2.insert(i);
         }
